@@ -10,20 +10,29 @@
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class crud {
 	private HashMap<String, String> database = new HashMap<String, String>();
-	private static final String FILE = "database.txt";
+	private static final File FILE = new File("database.txt");
 	
 	public crud() {
-		Scanner reader = new Scanner(FILE);
-		while (reader.hasNext()) {
-			String[] info = reader.nextLine().split(":");
-			database.put(info[0], info[1]);
+		Scanner reader;
+		try {
+			reader = new Scanner(FILE);
+			while (reader.hasNextLine()) {
+				if (reader.nextLine() != "") {
+					String[] info = reader.nextLine().split(":");
+					database.put(info[0], info[1]);
+				}
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		reader.close();
 	}
 	
 	private void update() {
@@ -68,9 +77,7 @@ public class crud {
 	
 	public void clear() {
 		// removes all data from the HashMap and updates the file
-		for (String key : database.keySet()) {
-			database.remove(key);
-		}
+		database.clear();
 		update();
 	}
 	
@@ -90,5 +97,9 @@ public class crud {
 			str += "DATA: " + key + " : " + database.get(key) + "\n";
 		}
 		return str;
+	}
+	
+	public int length() {
+		return database.size();
 	}
 }
