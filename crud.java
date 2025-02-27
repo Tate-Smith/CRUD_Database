@@ -20,9 +20,8 @@ public class crud {
 	private static final File FILE = new File("database.txt");
 	
 	public crud() {
-		Scanner reader;
 		try {
-			reader = new Scanner(FILE);
+			Scanner reader = new Scanner(FILE);
 			while (reader.hasNextLine()) {
 				if (reader.nextLine() != "") {
 					String[] info = reader.nextLine().split(":");
